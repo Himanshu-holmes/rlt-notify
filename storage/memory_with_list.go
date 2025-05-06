@@ -57,12 +57,12 @@ func(m *memoryWithList)PopAll(ctx context.Context, clientID int)([]entity.Notifi
 	item.mu.Lock()
 	defer item.mu.Unlock()
 	defer func(){
-		item.notifications = make([]entity.Notification,0,m.size)
+		item.notifications = nil
 	}()
 
 	return item.notifications, nil	
 }
 func (m *memoryWithList) get(ctx context.Context, clientID int) *userStorage {
-	item, _ := m.storage.LoadOrStore(clientID, &userStorage{mu: new(sync.Mutex), notifications: make([]entity.Notification, 0, m.size)})
+	item, _ := m.storage.LoadOrStore(clientID, &userStorage{mu: new(sync.Mutex)})
 	return item.(*userStorage)
 }
